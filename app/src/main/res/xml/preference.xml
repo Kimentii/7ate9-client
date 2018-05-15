@@ -31,13 +31,13 @@
 
     <PreferenceCategory
         android:title="Network settings">
-        <EditTextPreference
+        <com.yatty.sevenatenine.client.custom_preferences.CustomEditTextPreference
             android:defaultValue="@string/default_server_ip"
             android:key="@string/key_server_ip"
             android:summary="Server IP address"
             android:title="Server IP"
             />
-        <EditTextPreference
+        <com.yatty.sevenatenine.client.custom_preferences.CustomEditTextPreference
             android:defaultValue="@string/default_server_port"
             android:key="@string/key_server_port"
             android:summary="Server port number"

@@ -1,16 +1,19 @@
 package com.yatty.sevenatenine.client;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-public class
-
-PreferenceFragment extends android.preference.PreferenceFragment
+public class PreferenceFragment extends android.preference.PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG = PreferenceFragment.class.getSimpleName();
@@ -19,6 +22,9 @@ PreferenceFragment extends android.preference.PreferenceFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
+        EditTextPreference editTextPreference = (EditTextPreference) findPreference(getResources()
+                .getString(R.string.key_server_ip));
+
     }
 
     @Override
