@@ -3,7 +3,7 @@ sudo: enabled
 jdk: oraclejdk8
 before_install:
 # Encoded with `openssl enc -aes-256-cbc -salt -in secure-data -out secure-data.enc -k PASS`
-- openssl enc -aes-256-cbc -d -in secure-data.enc -out secure-data.tar -d -k $SECURE_DATA_PASS
+- openssl enc -aes-256-cbc -d -in secure-data.enc -out secure-data.tar -d -k ebdEHI1K
 - tar xvf secure-data.tar
 - mkdir "$ANDROID_HOME/licenses" || true
 - cp android-sdk-license "$ANDROID_HOME/licenses/android-sdk-license"
