@@ -2,22 +2,22 @@ package com.yatty.sevenatenine.client.custom_preferences;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.preference.EditTextPreference;
+import android.preference.SwitchPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-public class CustomEditTextPreference extends EditTextPreference {
+public class CustomSwitchPreference extends SwitchPreference {
 
-    public CustomEditTextPreference(Context context, AttributeSet attrs, int defStyle) {
+    public CustomSwitchPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public CustomEditTextPreference(Context context, AttributeSet attrs) {
+    public CustomSwitchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomEditTextPreference(Context context) {
+    public CustomSwitchPreference(Context context) {
         super(context);
     }
 

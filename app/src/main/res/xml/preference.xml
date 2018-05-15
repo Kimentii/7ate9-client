@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
+    <com.yatty.sevenatenine.client.custom_preferences.CustomPreferenceCategory
         android:title="Volume settings">
-        <SwitchPreference
+        <com.yatty.sevenatenine.client.custom_preferences.CustomSwitchPreference
             android:defaultValue="true"
             android:key="@string/key_is_music_enabled"
             android:summary="Enable background music"
             android:title="Music"/>
 
-        <SwitchPreference
+        <com.yatty.sevenatenine.client.custom_preferences.CustomSwitchPreference
             android:defaultValue="true"
             android:key="@string/key_are_game_sounds_enabled"
             android:summary="Enable game sounds"
             android:title="Game sounds"/>
-    </PreferenceCategory>
+    </com.yatty.sevenatenine.client.custom_preferences.CustomPreferenceCategory>
 
-    <PreferenceCategory
+    <com.yatty.sevenatenine.client.custom_preferences.CustomPreferenceCategory
         android:title="Visual settings">
-        <ListPreference
+        <com.yatty.sevenatenine.client.custom_preferences.CustomListPreference
             android:defaultValue="cards1"
             android:dialogTitle="Choose background picture"
             android:entries="@array/background_pictures"
@@ -26,10 +26,10 @@
             android:summary="Tap to choose background picture"
             android:title="Background image"
             />
-    </PreferenceCategory>
+    </com.yatty.sevenatenine.client.custom_preferences.CustomPreferenceCategory>
 
 
-    <PreferenceCategory
+    <com.yatty.sevenatenine.client.custom_preferences.CustomPreferenceCategory
         android:title="Network settings">
         <com.yatty.sevenatenine.client.custom_preferences.CustomEditTextPreference
             android:defaultValue="@string/default_server_ip"
@@ -43,6 +43,6 @@
             android:summary="Server port number"
             android:title="Server port"
             />
-    </PreferenceCategory>
+    </com.yatty.sevenatenine.client.custom_preferences.CustomPreferenceCategory>
 
 </PreferenceScreen>
