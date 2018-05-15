@@ -19,7 +19,7 @@ deploy:
   provider: releases
   api_key: $GITHUB_API_KEY
   file_glob: true
-  file: "/home/travis/build/zoxal/7ate9-client/app/build/outputs/apk/release/7ate9-client_v*"
+  file: "/home/travis/build/Kimentii/7ate9-client/app/build/outputs/apk/release/7ate9-client*"
   skip_cleanup: true
   overwrite: true
   on:
