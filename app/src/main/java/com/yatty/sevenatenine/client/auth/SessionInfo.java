@@ -4,19 +4,25 @@ import com.yatty.sevenatenine.api.commands_with_data.PrivateLobbyInfo;
 import com.yatty.sevenatenine.api.commands_with_data.PublicLobbyInfo;
 
 public class SessionInfo {
-    private static String userName;
+    private static final char DIVIDER = '|';
+
+    private static String userId;
     private static int userRating;
     private static String authToken;
     private static String gameId;
     private static PublicLobbyInfo sPublicLobbyInfo;
     private static PrivateLobbyInfo sPrivateLobbyInfo;
 
-    public static String getUserName() {
-        return userName;
+    public static String getUserId() {
+        return userId;
     }
 
-    public static void setUserName(String userName) {
-        SessionInfo.userName = userName;
+    public static void setUserId(String userId) {
+        SessionInfo.userId = userId;
+    }
+
+    public static String getUserName() {
+        return userId.substring(0, userId.indexOf(DIVIDER));
     }
 
     public static int getUserRating() {

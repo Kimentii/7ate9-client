@@ -100,7 +100,7 @@ public class GameActivity extends AppCompatActivity {
         PlayerInfo otherPlayersInfo[] = new PlayerInfo[allPlayersInfo.length - 1];
 
         for (int i = 0, j = 0; i < allPlayersInfo.length; i++) {
-            if (!allPlayersInfo[i].getPlayerId().equals(SessionInfo.getUserName())) {
+            if (!allPlayersInfo[i].getPlayerId().equals(SessionInfo.getUserId())) {
                 otherPlayersInfo[j] = allPlayersInfo[i];
                 j++;
             }
@@ -421,13 +421,13 @@ public class GameActivity extends AppCompatActivity {
                 NewStateNotification newStateNotification = (NewStateNotification) msg.obj;
                 if (newStateNotification.isLastMove()) {
                     NetworkService.setHandler(null);
-                    Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserName(),
+                    Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserId(),
                             newStateNotification.getGameResult().getWinner(), newStateNotification.getGameResult().getScores());
                     startActivity(nextActivity);
                     finish();
                 } else {
                     String moveWinner = newStateNotification.getMoveWinner();
-                    if (moveWinner != null && !moveWinner.equals(SessionInfo.getUserName())) {
+                    if (moveWinner != null && !moveWinner.equals(SessionInfo.getUserId())) {
                         int topCardButtonCoordinates[] = new int[2];
                         mTopCardImageButton.getLocationOnScreen(topCardButtonCoordinates);
                         int playerDeckCoordinates[] = new int[2];

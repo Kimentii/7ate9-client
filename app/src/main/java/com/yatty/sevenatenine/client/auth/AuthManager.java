@@ -15,7 +15,7 @@ public class AuthManager {
     /**
      * Calculates SHA-256 hash based on device MAC.
      *
-     * @return  unique device hash
+     * @return unique device hash
      */
     @SuppressLint("HardwareIds")
     public static String getUniqueDeviceHash(Context context) {
@@ -23,7 +23,7 @@ public class AuthManager {
                 .getSystemService(Context.WIFI_SERVICE);
         if (manager != null) {
             WifiInfo info = manager.getConnectionInfo();
-            return getSHAHash(info.getMacAddress());
+            return "mac: " + getSHAHash(info.getMacAddress());
         } else {
             throw new RuntimeException("Failed to retrieve WiFiManager");
         }
@@ -32,7 +32,7 @@ public class AuthManager {
     /**
      * Calculates SHA-256 hash string for any string.
      *
-     * @return  SHA-256 hash
+     * @return SHA-256 hash
      */
     public static String getSHAHash(@NonNull String data) {
         try {

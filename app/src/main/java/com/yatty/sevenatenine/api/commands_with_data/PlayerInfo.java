@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 public class PlayerInfo implements Parcelable, Serializable {
+    private static final char DIVIDER = '|';
+
     private String playerId;
     private int rating;
 
@@ -32,6 +34,10 @@ public class PlayerInfo implements Parcelable, Serializable {
 
     public String getPlayerId() {
         return playerId;
+    }
+
+    public String getPlayerName() {
+        return playerId.substring(0, playerId.indexOf(DIVIDER));
     }
 
     public int getRating() {

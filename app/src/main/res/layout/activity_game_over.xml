@@ -47,11 +47,12 @@
 
     <Button
         android:id="@+id/button_to_lobby_list"
+        style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="0"
         android:fontFamily="@font/permanent_marker"
-        android:text="@string/action_to_lobby_list" />
+        android:text="@string/action_to_lobby_list"/>
 
 </LinearLayout>

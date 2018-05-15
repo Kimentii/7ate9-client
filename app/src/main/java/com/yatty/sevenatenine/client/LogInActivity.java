@@ -1,12 +1,12 @@
 package com.yatty.sevenatenine.client;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -113,7 +112,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void enterServer(GoogleSignInAccount account) {
-        enterServer(account.getDisplayName(), AuthManager.getSHAHash(account.getId()));
+        enterServer(account.getDisplayName(), "google acc: " + AuthManager.getSHAHash(account.getId()));
     }
 
     private void enterServer(String name, String passwordHash) {
@@ -181,7 +180,7 @@ public class LogInActivity extends AppCompatActivity {
             if (msg.obj instanceof LogInResponse) {
                 LogInResponse logInResponse = (LogInResponse) msg.obj;
                 SessionInfo.setAuthToken(logInResponse.getAuthToken());
-                SessionInfo.setUserName(logInResponse.getPlayerId());
+                SessionInfo.setUserId(logInResponse.getPlayerId());
                 SessionInfo.setUserRating(logInResponse.getRating());
                 Log.d(TAG, "Connected");
                 NetworkService.setHandler(null);
@@ -191,8 +190,12 @@ public class LogInActivity extends AppCompatActivity {
                 appCompatActivity.finish();
             } else if (msg.obj instanceof ErrorResponse) {
                 ErrorResponse errorResponse = (ErrorResponse) msg.obj;
-                Toast.makeText(context, errorResponse.getShortDescription(), Toast.LENGTH_LONG);
-                connectButton.setClickable(true);
+                new AlertDialog.Builder(LogInActivity.this)
+                        .setTitle("Error")
+                        .setMessage(errorResponse.getShortDescription())
+                        .setPositiveButton("OK", (dialog, id) -> {
+                        }).show();
+                mConnectButton.setEnabled(true);
             }
         }
     }
