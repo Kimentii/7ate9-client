@@ -11,28 +11,25 @@
     <style name="TextStyleSmall" parent="android:TextAppearance.Small">
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/permanent_marker</item>
     </style>
 
     <style name="TextStyleMedium" parent="android:TextAppearance.Medium">
         <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="TextStyleMediumBold" parent="android:TextAppearance.Medium">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/permanent_marker</item>
     </style>
 
     <style name="TextStyleLarge" parent="android:TextAppearance.Large">
         <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="TextStyleLargeBold" parent="android:TextAppearance.Large">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/permanent_marker</item>
+        <item name="android:textSize">@dimen/text_style_large</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/permanent_marker</item>
+        <item name="android:textSize">@dimen/text_style_large</item>
+        <item name="android:padding">15dp</item>
     </style>
 
     <style name="ImageButtonStyleCard" parent="Base.Widget.AppCompat.ImageButton">

@@ -29,7 +29,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
-        android:text="game"/>
+        android:text="game"
+        android:textAppearance="@style/TextStyleLarge"/>
 
     <TextView
         style="@style/TextStyleSmall"
@@ -54,7 +55,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/et_lobby_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/shape_button"
+        android:fontFamily="@font/permanent_marker"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:text="@string/action_create_lobby"/>
 </RelativeLayout>

@@ -1,31 +1,61 @@
 package com.yatty.sevenatenine.client;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-public class
+public class PreferenceFragment extends android.preference.PreferenceFragment
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-PreferenceFragment extends android.preference.PreferenceFragment {
-
-    public static final String TAG = "PreferenceFragment";
+    public static final String TAG = PreferenceFragment.class.getSimpleName();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
+        EditTextPreference editTextPreference = (EditTextPreference) findPreference(getResources()
+                .getString(R.string.key_server_ip));
+
     }
 
-    // TODO: test deleting this code
-    /*@Override
+    @Override
+    public void onResume() {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity().getApplicationContext());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity().getApplicationContext());
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.i(TAG, "Music settings changed. SharedPreferences key: " + key);
-        musicEnabled = sharedPreferences.getBoolean(key, true);
+        Log.d(TAG, "onSharedPreferenceChanged: SharedPreferences key: " + key);
+        boolean musicEnabled = ApplicationSettings.isMusicEnabled(getActivity().getApplicationContext());
         if (musicEnabled) {
             Log.i(TAG, "Music enabled");
-            BackgroundMusicService.getInstance().start();
+            BackgroundMusicService.getInstance(getActivity().getApplicationContext()).start();
         } else {
             Log.i(TAG, "Music disabled");
-            BackgroundMusicService.getInstance().pause();
+            BackgroundMusicService.getInstance(getActivity().getApplicationContext()).pause();
         }
-    }*/
+        Drawable background = ApplicationSettings.getBackgroundPicture(getActivity().getApplicationContext());
+        View rootView = getActivity().findViewById(android.R.id.content);
+        rootView.setBackground(background);
+    }
 }

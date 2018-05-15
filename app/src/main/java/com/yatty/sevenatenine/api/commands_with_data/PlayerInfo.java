@@ -6,10 +6,19 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 public class PlayerInfo implements Parcelable, Serializable {
-    private String name;
+    private static final char DIVIDER = '|';
+
+    private String playerId;
+    private int rating;
+
+    public PlayerInfo(String playerId, int rating) {
+        this.playerId = playerId;
+        this.rating = rating;
+    }
 
     protected PlayerInfo(Parcel in) {
-        name = in.readString();
+        playerId = in.readString();
+        rating = in.readInt();
     }
 
     @Override
@@ -19,12 +28,22 @@ public class PlayerInfo implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
+        dest.writeString(playerId);
+        dest.writeInt(rating);
     }
 
-    public String getName() {
-        return name;
+    public String getPlayerId() {
+        return playerId;
     }
+
+    public String getPlayerName() {
+        return playerId.substring(0, playerId.indexOf(DIVIDER));
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
 
     public static final Creator<PlayerInfo> CREATOR = new Creator<PlayerInfo>() {
         @Override
