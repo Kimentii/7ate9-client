@@ -10,5 +10,4 @@ app/release
 .externalNativeBuild
 .idea/
 app/proguard-rules.pro
-gradle/
 keystore.properties

@@ -43,6 +43,8 @@ android {
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        setProperty("archivesBaseName", "7ate9-client_v" + versionCode)
+        versionNameSuffix "-R"
     }
     buildTypes {
         release {

@@ -1,0 +1,27 @@
+language: android
+sudo: enabled
+jdk: oraclejdk8
+before_install:
+# Encoded with `openssl enc -aes-256-cbc -salt -in secure-data -out secure-data.enc -k PASS`
+- openssl enc -aes-256-cbc -d -in secure-data.enc -out secure-data.tar -d -k $SECURE_DATA_PASS
+- tar xvf secure-data.tar
+- mkdir "$ANDROID_HOME/licenses" || true
+- cp android-sdk-license "$ANDROID_HOME/licenses/android-sdk-license"
+- chmod +x gradlew
+- "./gradlew dependencies || true"
+script: "./gradlew build"
+android:
+  licenses:
+  - android-sdk-preview-license-.+
+  - android-sdk-license-.+
+  - google-gdk-license-.+
+deploy:
+  provider: releases
+  api_key: $GITHUB_API_KEY
+  file_glob: true
+  file: "/home/travis/build/zoxal/7ate9-client/app/build/outputs/apk/release/7ate9-client*"
+  skip_cleanup: true
+  overwrite: true
+  on:
+    repo: Kimentii/7ate9-client
+    tags: true
