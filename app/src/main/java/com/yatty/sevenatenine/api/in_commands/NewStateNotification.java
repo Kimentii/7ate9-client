@@ -14,7 +14,7 @@ public class NewStateNotification implements InCommandInterface {
     private int moveNumber;
     private String moveWinner;
     private boolean lastMove;
-    private Boolean stalemate;
+    private boolean stalemate;
     private Card nextCard;
     private GameResult gameResult;
 
@@ -80,5 +80,13 @@ public class NewStateNotification implements InCommandInterface {
 
     public GameResult getGameResult() {
         return gameResult;
+    }
+
+    public boolean isStalemate() {
+        return stalemate;
+    }
+
+    public void setStalemate(boolean stalemate) {
+        this.stalemate = stalemate;
     }
 }
