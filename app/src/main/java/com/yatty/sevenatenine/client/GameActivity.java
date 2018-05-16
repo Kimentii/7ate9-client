@@ -427,7 +427,7 @@ public class GameActivity extends AppCompatActivity {
                             SessionInfo.setUserRating(result.getNewRating());
                         }
                     }
-                    Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserName(),
+                    Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserId(),
                             newStateNotification.getGameResult().getWinner(), newStateNotification.getGameResult().getScores());
                     startActivity(nextActivity);
                     finish();
@@ -501,6 +501,7 @@ public class GameActivity extends AppCompatActivity {
                         mCardUnderTopCardImageButton.setImageDrawable(mTopCardImageButton.getDrawable());
                         mTopCardImageButton.bringToFront();
                     }
+                    Log.d(TAG, "Stalemate: " + newStateNotification.isStalemate());
                     if (newStateNotification.isStalemate()) {
                         showToast("Stalemate, random card will be set!");
                     }
@@ -514,7 +515,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void showToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

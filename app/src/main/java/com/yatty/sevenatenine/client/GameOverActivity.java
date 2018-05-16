@@ -21,13 +21,13 @@ import java.util.Arrays;
 public class GameOverActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = GameOverActivity.class.getSimpleName();
     private static final String EXTRA_CARDS_LEFT = "cards_left_key";
-    private static final String EXTRA_WINNER_NAME = "winner_name_key";
-    private static final String EXTRA_PLAYER_NAME = "player_name_key";
+    private static final String EXTRA_WINNER_ID = "winner_name_key";
+    private static final String EXTRA_PLAYER_ID = "player_name_key";
     private TextView mWinnerNameTextView;
     private Button mToLobbyListButton;
     private TextView mGameOverText;
-    private String mPlayerName;
-    private String mWinnerName;
+    private String mPlayerId;
+    private String mWinnerId;
     private ListView mScoreBoard;
     private boolean mShouldMusicStay;
     PlayerResult[] mScores;
@@ -35,8 +35,8 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
 
     public static Intent newIntent(Context context, String playerName, String winnerName, PlayerResult[] scores) {
         Intent intent = new Intent(context, GameOverActivity.class);
-        intent.putExtra(EXTRA_PLAYER_NAME, playerName);
-        intent.putExtra(EXTRA_WINNER_NAME, winnerName);
+        intent.putExtra(EXTRA_PLAYER_ID, playerName);
+        intent.putExtra(EXTRA_WINNER_ID, winnerName);
         intent.putExtra(EXTRA_CARDS_LEFT, scores);
         return intent;
     }
@@ -64,7 +64,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
                         .inflate(android.R.layout.simple_list_item_2, null);
             }
             ((TextView) listView.findViewById(android.R.id.text1))
-                    .setText(result.getPlayerName());
+                    .setText(result.getPlayerName() + " (" + result.getNewRating() + ")");
             ((TextView) listView.findViewById(android.R.id.text2))
                     .setText("Cards left: " + result.getCardsLeft());
             return listView;
@@ -81,19 +81,22 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         mScoreBoard = findViewById(R.id.lv_score_board);
         mToLobbyListButton.setOnClickListener(this);
         Intent intent = getIntent();
-        mPlayerName = intent.getStringExtra(EXTRA_PLAYER_NAME);
-        mWinnerName = intent.getStringExtra(EXTRA_WINNER_NAME);
+        mPlayerId = intent.getStringExtra(EXTRA_PLAYER_ID);
+        mWinnerId = intent.getStringExtra(EXTRA_WINNER_ID);
         Parcelable parcelableArray[] = intent.getParcelableArrayExtra(EXTRA_CARDS_LEFT);
         if (parcelableArray != null) {
             mScores = Arrays.copyOf(parcelableArray, parcelableArray.length, PlayerResult[].class);
         }
         sortByCardCount(mScores);
-        if (mWinnerName == null) mWinnerName = mScores[0].getPlayerId();
-        if (mPlayerName.equals(mWinnerName)) mGameOverText.setText("Winner winner chicken dinner!");
-        else mGameOverText.setText("Better luck next time!");
-        mWinnerNameTextView.setText(mWinnerName);
-        Log.d(TAG, "Winner: " + mWinnerName);
-        Log.d(TAG, "Player name: " + mPlayerName);
+        if (mWinnerId == null) mWinnerId = mScores[0].getPlayerId();
+        if (mPlayerId.equals(mWinnerId)) {
+            mGameOverText.setText("Winner winner chicken dinner!");
+        } else {
+            mGameOverText.setText("Better luck next time!");
+        }
+        mWinnerNameTextView.setText(mWinnerId.substring(0, mWinnerId.indexOf("|")));
+        Log.d(TAG, "Winner: " + mWinnerId);
+        Log.d(TAG, "Player name: " + mPlayerId);
         Log.d(TAG, "Scores:");
         for (int i = 0; i < mScores.length; i++) {
             Log.d(TAG, mScores[i].getPlayerId() + ": " + mScores[i].getCardsLeft());

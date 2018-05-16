@@ -22,12 +22,12 @@ public class NewStateNotification implements InCommandInterface {
         moveNumber = in.readInt();
         moveWinner = in.readString();
         lastMove = in.readByte() != 0;
+        stalemate = in.readByte() != 0;
         nextCard = in.readParcelable(Card.class.getClassLoader());
         gameResult = in.readParcelable(GameResult.class.getClassLoader());
-        stalemate = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<NewStateNotification> CREATOR = new Parcelable.Creator<NewStateNotification>() {
+    public static final Creator<NewStateNotification> CREATOR = new Creator<NewStateNotification>() {
         @Override
         public NewStateNotification createFromParcel(Parcel in) {
             return new NewStateNotification(in);
@@ -45,21 +45,6 @@ public class NewStateNotification implements InCommandInterface {
         Message message = new Message();
         message.obj = this;
         handler.sendMessage(message);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(moveNumber);
-        dest.writeString(moveWinner);
-        dest.writeByte((byte) (lastMove ? 1 : 0));
-        dest.writeParcelable(nextCard, flags);
-        dest.writeParcelable(gameResult, flags);
-        dest.writeByte((byte) (stalemate ? 1 : 0));
     }
 
     public int getMoveNumber() {
@@ -88,5 +73,20 @@ public class NewStateNotification implements InCommandInterface {
 
     public void setStalemate(boolean stalemate) {
         this.stalemate = stalemate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(moveNumber);
+        dest.writeString(moveWinner);
+        dest.writeByte((byte) (lastMove ? 1 : 0));
+        dest.writeByte((byte) (stalemate ? 1 : 0));
+        dest.writeParcelable(nextCard, flags);
+        dest.writeParcelable(gameResult, flags);
     }
 }
