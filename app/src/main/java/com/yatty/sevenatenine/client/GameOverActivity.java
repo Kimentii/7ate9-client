@@ -62,7 +62,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
                         .inflate(android.R.layout.simple_list_item_2, null);
             }
             ((TextView) listView.findViewById(android.R.id.text1))
-                    .setText(result.getPlayerId());
+                    .setText(result.getPlayerName());
             ((TextView) listView.findViewById(android.R.id.text2))
                     .setText("Cards left: " + result.getCardsLeft());
             return listView;

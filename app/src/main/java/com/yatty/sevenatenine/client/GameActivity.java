@@ -421,7 +421,7 @@ public class GameActivity extends AppCompatActivity {
                 NewStateNotification newStateNotification = (NewStateNotification) msg.obj;
                 if (newStateNotification.isLastMove()) {
                     NetworkService.setHandler(null);
-                    Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserId(),
+                    Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserName(),
                             newStateNotification.getGameResult().getWinner(), newStateNotification.getGameResult().getScores());
                     startActivity(nextActivity);
                     finish();
