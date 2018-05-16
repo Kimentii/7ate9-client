@@ -525,6 +525,7 @@ public class GameActivity extends AppCompatActivity {
                         Context context = GameActivity.this.getApplicationContext();
                         Intent nextActivity = LobbyListActivity.getStartIntent(context);
                         context.startActivity(nextActivity);
+                        finish();
                     }
                 })
                 .setNegativeButton("No", null).show();
