@@ -25,7 +25,6 @@ public class NetworkService extends Service {
     private static final int ACTION_DISCONNECT = 99;
 
     private volatile ExecutorService mExecutorService;
-    private static volatile Handler responseHandler;
 
     @Override
     public void onCreate() {
@@ -35,14 +34,15 @@ public class NetworkService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        Log.d(TAG, "Start network command");
         int action = intent.getIntExtra(KEY_ACTION, -1);
+        Log.d(TAG, "Got intent with action " + action);
         switch (action) {
-            case ACTION_CONNECT:
+            case ACTION_CONNECT: {
                 Log.d(TAG, "ACTION_CONNECT");
                 mExecutorService.execute(this::connect);
                 break;
-            case ACTION_SEND_MESSAGE:
+            }
+            case ACTION_SEND_MESSAGE: {
                 Log.d(TAG, "ACTION_SEND_MESSAGE");
                 mExecutorService.execute(() -> {
                     Log.d(TAG, "Trying to send message...");
@@ -56,6 +56,7 @@ public class NetworkService extends Service {
                     }
                 });
                 break;
+            }
         }
         return START_REDELIVER_INTENT;
     }
@@ -79,7 +80,6 @@ public class NetworkService extends Service {
     public static Intent getConnectionIntent(Context context) {
         Intent intent = new Intent(context, NetworkService.class);
         intent.putExtra(KEY_ACTION, ACTION_CONNECT);
-        Log.d(TAG, "Intent created");
         return intent;
     }
 

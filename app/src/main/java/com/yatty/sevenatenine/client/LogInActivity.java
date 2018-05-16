@@ -26,6 +26,9 @@ import com.yatty.sevenatenine.api.in_commands.LogInResponse;
 import com.yatty.sevenatenine.api.out_commands.LogInRequest;
 import com.yatty.sevenatenine.client.auth.AuthManager;
 import com.yatty.sevenatenine.client.auth.SessionInfo;
+import com.yatty.sevenatenine.client.errors.network.ConnectionRefusedException;
+import com.yatty.sevenatenine.client.messages.network.ConnectionRefusedMessage;
+import com.yatty.sevenatenine.client.messages.network.ServerConnectedMessage;
 import com.yatty.sevenatenine.client.network.NetworkService;
 
 public class LogInActivity extends AppCompatActivity {
@@ -33,10 +36,12 @@ public class LogInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
 
     private Button mConnectButton;
+    private Button mGoogleConnectButton;
     private EditText mNameEditText;
     private boolean shouldMusicStay;
     private Handler mHandler;
-
+    private String mName;
+    private String mPasswordHash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class LogInActivity extends AppCompatActivity {
 //        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_log_in);
         mConnectButton = findViewById(R.id.button_log_in);
+        mGoogleConnectButton = findViewById(R.id.button_google_log_in);
         mNameEditText = findViewById(R.id.et_name);
         mHandler = new LogInHandler(this, mNameEditText, mConnectButton);
     }
@@ -58,7 +64,7 @@ public class LogInActivity extends AppCompatActivity {
     public void connectButtonClicked(View view) {
         try {
             if (!NetworkService.isOnline(getApplicationContext())) {
-                showSnackbar("No connection.");
+                showErrorAlert("No connection");
                 return;
             }
             if (!mNameEditText.getText().toString().isEmpty()) {
@@ -69,7 +75,7 @@ public class LogInActivity extends AppCompatActivity {
                         AuthManager.getUniqueDeviceHash(getApplicationContext())
                 );
             } else {
-                showSnackbar("Enter nickname.");
+                showSnackbar("Enter nickname");
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception during connect", e);
@@ -78,7 +84,7 @@ public class LogInActivity extends AppCompatActivity {
 
     public void googleSignInClicked(View view) {
         if (!NetworkService.isOnline(getApplicationContext())) {
-            showSnackbar("No connection.");
+            showErrorAlert("No connection");
             return;
         }
         view.setEnabled(false);
@@ -87,6 +93,7 @@ public class LogInActivity extends AppCompatActivity {
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        showSnackbar("Connecting...");
         try {
             if (account != null) {
                 String personId = account.getId();
@@ -97,9 +104,7 @@ public class LogInActivity extends AppCompatActivity {
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
-            view.setEnabled(true);
         } catch (Exception e) {
-            view.setEnabled(true);
             showSnackbar("Failed to connect");
             Log.e(TAG, "Failed to connect to server", e);
         }
@@ -112,18 +117,15 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void enterServer(GoogleSignInAccount account) {
+        NetworkService.setHandler(mHandler);
         enterServer(account.getDisplayName(), "google acc: " + AuthManager.getSHAHash(account.getId()));
     }
 
     private void enterServer(String name, String passwordHash) {
         Log.d(TAG, "Connecting to server...");
+        mName = name;
+        mPasswordHash = passwordHash;
         startService(NetworkService.getConnectionIntent(getApplicationContext()));
-        LogInRequest logInRequest = new LogInRequest();
-        logInRequest.setName(name);
-        logInRequest.setPasswordHash(passwordHash);
-        NetworkService.setHandler(mHandler);
-        Log.d(TAG, "Sending login request");
-        startService(NetworkService.getSendIntent(getApplicationContext(), logInRequest, false));
     }
 
     private void showSnackbar(String title) {
@@ -133,6 +135,14 @@ public class LogInActivity extends AppCompatActivity {
         params.gravity = Gravity.TOP;
         snackbar.getView().setLayoutParams(params);
         snackbar.show();
+    }
+
+    private void showErrorAlert(String message) {
+        new AlertDialog.Builder(LogInActivity.this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, id) -> {
+                }).show();
     }
 
     @Override
@@ -147,7 +157,6 @@ public class LogInActivity extends AppCompatActivity {
                 Log.d(TAG, "Acc display name: " + account.getDisplayName());
                 Log.d(TAG, "Acc family name: " + account.getFamilyName());
                 Log.d(TAG, "Acc given name: " + account.getGivenName());
-                showSnackbar("winner-winner!");
 
                 if (account.getId() == null) {
                     Log.e(TAG, "Failed to get Google Account id");
@@ -155,7 +164,7 @@ public class LogInActivity extends AppCompatActivity {
                 }
                 enterServer(account);
             } catch (Exception e) {
-                showSnackbar("Failed to connect to Google Account");
+                showErrorAlert("Failed to connect to Google Account");
                 Log.e(TAG, "Exception", e);
             }
         }
@@ -176,26 +185,35 @@ public class LogInActivity extends AppCompatActivity {
 
         @Override
         public void handleMessage(Message msg) {
-            Log.d(TAG, "LogInActivity.Handler: Get obj: " + msg.obj);
-            if (msg.obj instanceof LogInResponse) {
+            if (msg.obj instanceof ServerConnectedMessage) {
+                Log.d(TAG, "Connected to server, sending login request");
+                LogInRequest logInRequest = new LogInRequest();
+                logInRequest.setName(mName);
+                logInRequest.setPasswordHash(mPasswordHash);
+                startService(NetworkService.getSendIntent(getApplicationContext(), logInRequest, false));
+                mConnectButton.setEnabled(true);
+                mGoogleConnectButton.setEnabled(true);
+            } else if (msg.obj instanceof ConnectionRefusedMessage) {
+                showErrorAlert("Failed to connect to server");
+                mConnectButton.setEnabled(true);
+                mGoogleConnectButton.setEnabled(true);
+            } else if (msg.obj instanceof LogInResponse) {
+                Log.d(TAG, "Entered server");
                 LogInResponse logInResponse = (LogInResponse) msg.obj;
                 SessionInfo.setAuthToken(logInResponse.getAuthToken());
                 SessionInfo.setUserId(logInResponse.getPlayerId());
                 SessionInfo.setUserRating(logInResponse.getRating());
-                Log.d(TAG, "Connected");
-                NetworkService.setHandler(null);
                 Intent nextActivity = LobbyListActivity.getStartIntent(context);
                 context.startActivity(nextActivity);
                 shouldMusicStay = true;
                 appCompatActivity.finish();
             } else if (msg.obj instanceof ErrorResponse) {
+                Log.e(TAG, "Got an exception");
                 ErrorResponse errorResponse = (ErrorResponse) msg.obj;
-                new AlertDialog.Builder(LogInActivity.this)
-                        .setTitle("Error")
-                        .setMessage(errorResponse.getShortDescription())
-                        .setPositiveButton("OK", (dialog, id) -> {
-                        }).show();
+                String error = errorResponse.getShortDescription();
+                showErrorAlert(error == null ? "Internal Server Error" : error);
                 mConnectButton.setEnabled(true);
+                mGoogleConnectButton.setEnabled(true);
             }
         }
     }

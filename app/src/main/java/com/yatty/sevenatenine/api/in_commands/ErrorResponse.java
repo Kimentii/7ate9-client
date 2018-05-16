@@ -10,6 +10,10 @@ public class ErrorResponse implements InCommandInterface {
     private String shortDescription;
     private String additionalInfo;
 
+    public ErrorResponse(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
     protected ErrorResponse(Parcel in) {
         errorUUID = in.readString();
         shortDescription = in.readString();
