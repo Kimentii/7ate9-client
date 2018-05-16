@@ -1,6 +1,7 @@
 package com.yatty.sevenatenine.client.network;
 
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.ExclusionStrategy;
@@ -30,6 +31,8 @@ import com.yatty.sevenatenine.api.out_commands.LogInRequest;
 import com.yatty.sevenatenine.api.out_commands.LogOutRequest;
 import com.yatty.sevenatenine.api.out_commands.MoveRequest;
 import com.yatty.sevenatenine.client.auth.SessionInfo;
+import com.yatty.sevenatenine.client.messages.network.ConnectionRefusedMessage;
+import com.yatty.sevenatenine.client.messages.network.ServerConnectedMessage;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
@@ -129,10 +132,14 @@ class NettyClient {
                 if (future.isSuccess()) {
                     mConnectedSemaphore.release();
                     Log.d(TAG, "Connected to server");
+                    Message message = new Message();
+                    message.obj = new ServerConnectedMessage();
+                    mHandler.sendMessage(message);
                 } else {
-                    future.cause().printStackTrace();
+                    Message message = new Message();
+                    message.obj = new ConnectionRefusedMessage();
                     Log.d(TAG, "Failed to connect to server", future.cause());
-                    throw new RuntimeException("Failed to connect to server", future.cause());
+                    mHandler.sendMessage(message);
                 }
                 mConnectedSemaphore.release();
             }).sync().channel();

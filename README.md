@@ -1,4 +1,4 @@
-# 7ate9 
+# 7ate9 [![Build Status](https://travis-ci.org/Kimentii/7ate9-client.svg?branch=master)](https://travis-ci.org/Kimentii/7ate9-client)
 В этом репозитории содержится:
 * Реализация клиентской части игры 7ate9 (модуль mobile)
 
