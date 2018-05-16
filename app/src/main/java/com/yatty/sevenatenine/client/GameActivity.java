@@ -77,6 +77,7 @@ public class GameActivity extends AppCompatActivity {
     private int mSoundCardSlideId;
     private int mSoundCardSlideOpponentId;
     private int mSoundCardPlaceId;
+    private PlayerInfo mOpponentsPlayerInfo[];
     private SoundPool mSoundPool;
 
     private void initUi(GameStartedNotification gameStartedNotification) {
@@ -98,27 +99,27 @@ public class GameActivity extends AppCompatActivity {
         mThirdPlayerNameTextView = findViewById(R.id.tv_third_player_name);
 
         PlayerInfo allPlayersInfo[] = SessionInfo.getPrivateLobbyInfo().getPlayers();
-        PlayerInfo otherPlayersInfo[] = new PlayerInfo[allPlayersInfo.length - 1];
+        mOpponentsPlayerInfo = new PlayerInfo[allPlayersInfo.length - 1];
 
         for (int i = 0, j = 0; i < allPlayersInfo.length; i++) {
             if (!allPlayersInfo[i].getPlayerId().equals(SessionInfo.getUserId())) {
-                otherPlayersInfo[j] = allPlayersInfo[i];
+                mOpponentsPlayerInfo[j] = allPlayersInfo[i];
                 j++;
             }
         }
         int cardsNum = gameStartedNotification.getPlayerCards().size();
-        switch (otherPlayersInfo.length) {
+        switch (mOpponentsPlayerInfo.length) {
             case 3:
                 mThirdPlayerDeck.setVisibility(View.VISIBLE);
-                mThirdPlayerNameTextView.setText(otherPlayersInfo[2].getPlayerName());
+                mThirdPlayerNameTextView.setText(mOpponentsPlayerInfo[2].getPlayerName());
                 mThirdPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
             case 2:
                 mSecondPlayerDeck.setVisibility(View.VISIBLE);
-                mSecondPlayerNameTextView.setText(otherPlayersInfo[1].getPlayerName());
+                mSecondPlayerNameTextView.setText(mOpponentsPlayerInfo[1].getPlayerName());
                 mSecondPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
             case 1:
                 mFirstPlayerDeck.setVisibility(View.VISIBLE);
-                mFirstPlayerNameTextView.setText(otherPlayersInfo[0].getPlayerName());
+                mFirstPlayerNameTextView.setText(mOpponentsPlayerInfo[0].getPlayerName());
                 mFirstPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
         }
         mUserCardsNumTextView.setText(String.valueOf(cardsNum));
@@ -434,7 +435,7 @@ public class GameActivity extends AppCompatActivity {
                         mTopCardImageButton.getLocationOnScreen(topCardButtonCoordinates);
                         int playerDeckCoordinates[] = new int[2];
                         TranslateAnimation animation;
-                        if (moveWinner.equals(mFirstPlayerNameTextView.getText().toString())) {
+                        if (moveWinner.equals(mOpponentsPlayerInfo[0].getPlayerId())) {
                             mFirstPlayerCardsNumTextView.setText(String.valueOf(Integer.parseInt(
                                     mFirstPlayerCardsNumTextView.getText().toString()) - 1));
                             mFirstPlayerDeck.getLocationOnScreen(playerDeckCoordinates);
@@ -450,7 +451,7 @@ public class GameActivity extends AppCompatActivity {
                             );
                             animation.setDuration(CARD_DISTRIBUTION_ANIMATION_DURATION_MILLIS);
                             mTopCardImageButton.startAnimation(animation);
-                        } else if (moveWinner.equals(mSecondPlayerNameTextView.getText().toString())) {
+                        } else if (moveWinner.equals(mOpponentsPlayerInfo[1].getPlayerId())) {
                             mSecondPlayerCardsNumTextView.setText(String.valueOf(Integer.parseInt(
                                     mSecondPlayerCardsNumTextView.getText().toString()) - 1));
                             mSecondPlayerDeck.getLocationOnScreen(playerDeckCoordinates);
@@ -466,7 +467,7 @@ public class GameActivity extends AppCompatActivity {
                             );
                             animation.setDuration(CARD_DISTRIBUTION_ANIMATION_DURATION_MILLIS);
                             mTopCardImageButton.startAnimation(animation);
-                        } else if (moveWinner.equals(mThirdPlayerNameTextView.getText().toString())) {
+                        } else if (moveWinner.equals(mOpponentsPlayerInfo[2].getPlayerId())) {
                             mThirdPlayerCardsNumTextView.setText(String.valueOf(Integer.parseInt(
                                     mThirdPlayerCardsNumTextView.getText().toString()) - 1));
                             mThirdPlayerDeck.getLocationOnScreen(playerDeckCoordinates);
