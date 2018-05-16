@@ -1,5 +1,6 @@
 package com.yatty.sevenatenine.client;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -53,5 +54,10 @@ public class MainActivity extends AppCompatActivity {
         if (!mShouldMusicStay) {
             stopService(BackgroundMusicService.getIntent(getApplicationContext()));
         }
+    }
+
+    public static Intent getStartIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        return intent;
     }
 }

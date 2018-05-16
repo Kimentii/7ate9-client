@@ -22,7 +22,7 @@ public class CreateLobbyActivity extends AppCompatActivity {
     private Spinner mPlayersNumberSpinner;
     private EditText mLobbyNameEditText;
     private Button mCreateLobbyButton;
-    private boolean shouldMusicStay = false;
+    private boolean mShouldMusicStay = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class CreateLobbyActivity extends AppCompatActivity {
                     createLobbyRequest.setAuthToken(SessionInfo.getAuthToken());
                     Intent intentWithData = LobbyListActivity.getIntentWithData(getApplicationContext(), createLobbyRequest);
                     setResult(RESULT_OK, intentWithData);
-                    shouldMusicStay = true;
+                    mShouldMusicStay = true;
                     finish();
                 } else {
                     showSnackbar("Enter lobby name.");
@@ -59,7 +59,7 @@ public class CreateLobbyActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (!shouldMusicStay) {
+        if (!mShouldMusicStay) {
             stopService(BackgroundMusicService.getIntent(this));
         }
     }
@@ -82,5 +82,11 @@ public class CreateLobbyActivity extends AppCompatActivity {
         params.gravity = Gravity.TOP;
         snackbar.getView().setLayoutParams(params);
         snackbar.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mShouldMusicStay = true;
     }
 }

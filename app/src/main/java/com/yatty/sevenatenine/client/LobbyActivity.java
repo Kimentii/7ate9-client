@@ -30,7 +30,7 @@ public class LobbyActivity extends AppCompatActivity {
 
     private TextView mPlayersNumberTextView;
     private ListView mLobbyPlayersListView;
-    private boolean shouldMusicStay = false;
+    private boolean mShouldMusicStay = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class LobbyActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (!shouldMusicStay) {
+        if (!mShouldMusicStay) {
             startService(BackgroundMusicService.getIntent(this));
         }
     }
@@ -85,7 +85,7 @@ public class LobbyActivity extends AppCompatActivity {
                         Context context = getApplicationContext();
                         Intent nextActivity = LobbyListActivity.getStartIntent(context);
                         context.startActivity(nextActivity);
-                        shouldMusicStay = true;
+                        mShouldMusicStay = true;
                         finish();
                     }
                 })

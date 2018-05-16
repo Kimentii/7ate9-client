@@ -44,7 +44,7 @@ public class LobbyListActivity extends AppCompatActivity {
     private RecyclerView mLobbyListRecyclerView;
     private TextView mEmptyLobbyListTextView;
     private LobbyAdapter mLobbyAdapter;
-    private boolean shouldMusicStay;
+    private boolean mShouldMusicStay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class LobbyListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (!shouldMusicStay) {
+        if (!mShouldMusicStay) {
             stopService(BackgroundMusicService.getIntent(getApplicationContext()));
         }
     }
@@ -238,7 +238,7 @@ public class LobbyListActivity extends AppCompatActivity {
                 NetworkService.setHandler(null);
                 Intent nextActivity = LobbyActivity.getStartIntent(getApplicationContext());
                 startActivity(nextActivity);
-                shouldMusicStay = true;
+                mShouldMusicStay = true;
                 finish();
             } else if (msg.obj instanceof CreateLobbyResponse) {
                 Log.d(TAG, "LobbyListActivityHandler: CreateLobbyResponse");
@@ -271,6 +271,7 @@ public class LobbyListActivity extends AppCompatActivity {
                         Context context = LobbyListActivity.this.getApplicationContext();
                         Intent nextActivity = LogInActivity.getStartIntent(context);
                         context.startActivity(nextActivity);
+                        mShouldMusicStay = true;
                         finish();
                     }
                 })

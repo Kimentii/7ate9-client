@@ -109,15 +109,15 @@ public class GameActivity extends AppCompatActivity {
         switch (otherPlayersInfo.length) {
             case 3:
                 mThirdPlayerDeck.setVisibility(View.VISIBLE);
-                mThirdPlayerNameTextView.setText(otherPlayersInfo[2].getPlayerId());
+                mThirdPlayerNameTextView.setText(otherPlayersInfo[2].getPlayerName());
                 mThirdPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
             case 2:
                 mSecondPlayerDeck.setVisibility(View.VISIBLE);
-                mSecondPlayerNameTextView.setText(otherPlayersInfo[1].getPlayerId());
+                mSecondPlayerNameTextView.setText(otherPlayersInfo[1].getPlayerName());
                 mSecondPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
             case 1:
                 mFirstPlayerDeck.setVisibility(View.VISIBLE);
-                mFirstPlayerNameTextView.setText(otherPlayersInfo[0].getPlayerId());
+                mFirstPlayerNameTextView.setText(otherPlayersInfo[0].getPlayerName());
                 mFirstPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
         }
         mUserCardsNumTextView.setText(String.valueOf(cardsNum));
@@ -529,8 +529,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // TODO add music
-        //BackgroundMusicService.getInstance(this.getApplicationContext()).stop();
     }
 
     @Override
