@@ -20,6 +20,7 @@ import com.yatty.sevenatenine.api.commands_with_data.PlayerInfo;
 import com.yatty.sevenatenine.api.in_commands.GameStartedNotification;
 import com.yatty.sevenatenine.api.in_commands.LobbyStateChangedNotification;
 import com.yatty.sevenatenine.api.out_commands.LeaveGameRequest;
+import com.yatty.sevenatenine.api.out_commands.LeaveLobbyRequest;
 import com.yatty.sevenatenine.client.auth.SessionInfo;
 import com.yatty.sevenatenine.client.network.NetworkService;
 
@@ -75,12 +76,12 @@ public class LobbyActivity extends AppCompatActivity {
                 //android.R.string.yes
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        LeaveGameRequest leaveGameRequest = new LeaveGameRequest();
-                        leaveGameRequest.setAuthToken(SessionInfo.getAuthToken());
-                        leaveGameRequest.setGameId(SessionInfo.getGameId());
+                        LeaveLobbyRequest leaveLobbyRequest = new LeaveLobbyRequest();
+                        leaveLobbyRequest.setAuthToken(SessionInfo.getAuthToken());
+                        leaveLobbyRequest.setLobbyId(SessionInfo.getGameId());
 
                         startService(NetworkService.getSendIntent(getApplicationContext(),
-                                leaveGameRequest, true));
+                                leaveLobbyRequest, true));
 
                         Context context = getApplicationContext();
                         Intent nextActivity = LobbyListActivity.getStartIntent(context);

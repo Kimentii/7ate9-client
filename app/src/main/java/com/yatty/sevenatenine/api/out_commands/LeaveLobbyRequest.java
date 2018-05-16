@@ -6,6 +6,9 @@ public class LeaveLobbyRequest implements Serializable {
     private String lobbyId;
     private String authToken;
 
+    public LeaveLobbyRequest() {
+    }
+
     public LeaveLobbyRequest(String lobbyId) {
         this.lobbyId = lobbyId;
     }
