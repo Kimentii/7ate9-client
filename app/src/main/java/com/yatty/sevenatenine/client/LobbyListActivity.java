@@ -63,6 +63,7 @@ public class LobbyListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent startIntent = CreateLobbyActivity.getStartIntent(getApplicationContext());
                 startActivityForResult(startIntent, REQUEST_CODE);
+                mShouldMusicStay = true;
             }
         });
         mSettingsFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +71,7 @@ public class LobbyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = SettingsActivity.getStartIntent(getApplicationContext());
+                mShouldMusicStay = true;
                 startActivity(intent);
             }
         });
@@ -159,7 +161,7 @@ public class LobbyListActivity extends AppCompatActivity {
             super(itemView);
             itemView.setOnClickListener(this);
             mLobbyNameTextView = itemView.findViewById(R.id.tv_lobby_name);
-            mLobbyPlayersTextView = itemView.findViewById(R.id.tv_lobby_players);
+            mLobbyPlayersTextView = itemView.findViewById(R.id.tv_player_rating);
         }
 
         public void bindLobby(PublicLobbyInfo publicLobbyInfo) {
@@ -251,6 +253,8 @@ public class LobbyListActivity extends AppCompatActivity {
                 NetworkService.setHandler(null);
                 Intent intent = LobbyActivity.getStartIntent(getApplicationContext());
                 startActivity(intent);
+                mShouldMusicStay = true;
+                finish();
             }
         }
     }

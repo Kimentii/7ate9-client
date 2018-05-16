@@ -36,7 +36,7 @@ public class LobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
-        mPlayersNumberTextView = findViewById(R.id.tv_lobby_players);
+        mPlayersNumberTextView = findViewById(R.id.tv_player_rating);
         mLobbyPlayersListView = findViewById(R.id.lv_lobby_players);
         LobbyActivityHandler lobbyActivityHandler = new LobbyActivityHandler();
         NetworkService.setHandler(lobbyActivityHandler);
@@ -53,7 +53,7 @@ public class LobbyActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (!mShouldMusicStay) {
-            startService(BackgroundMusicService.getIntent(this));
+            stopService(BackgroundMusicService.getIntent(this));
         }
     }
 
@@ -63,7 +63,7 @@ public class LobbyActivity extends AppCompatActivity {
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
         if (ApplicationSettings.isMusicEnabled(this)) {
-            stopService(BackgroundMusicService.getIntent(this));
+            startService(BackgroundMusicService.getIntent(this));
         }
     }
 
@@ -116,7 +116,7 @@ public class LobbyActivity extends AppCompatActivity {
         private PlayerInfo[] mPlayerList;
 
         public LobbyPlayersListAdapter(Context context, PlayerInfo[] playerList) {
-            super(context, android.R.layout.simple_list_item_2);
+            super(context, R.layout.item_player);
             this.mPlayerList = playerList;
         }
 
@@ -126,12 +126,11 @@ public class LobbyActivity extends AppCompatActivity {
 
             if (listView == null) {
                 listView = LayoutInflater.from(getContext())
-                        .inflate(android.R.layout.simple_list_item_2, null);
+                        .inflate(R.layout.item_player, null);
             }
-
-            ((TextView) listView.findViewById(android.R.id.text1))
+            ((TextView) listView.findViewById(R.id.tv_player_name))
                     .setText(playerInfo.getPlayerName());
-            ((TextView) listView.findViewById(android.R.id.text2))
+            ((TextView) listView.findViewById(R.id.tv_player_rating))
                     .setText(String.valueOf(playerInfo.getRating()));
             return listView;
         }

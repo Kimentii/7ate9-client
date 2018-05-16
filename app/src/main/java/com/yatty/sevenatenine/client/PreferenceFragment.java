@@ -25,18 +25,18 @@ public class PreferenceFragment extends android.preference.PreferenceFragment
 
     @Override
     public void onResume() {
+        super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity().getApplicationContext());
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        super.onResume();
     }
 
     @Override
     public void onPause() {
+        super.onPause();
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity().getApplicationContext());
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        super.onPause();
     }
 
     @Override

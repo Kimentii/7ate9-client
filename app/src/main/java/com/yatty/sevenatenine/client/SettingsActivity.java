@@ -9,7 +9,8 @@ import android.view.View;
 public class SettingsActivity extends PreferenceActivity {
     public static final String MUSIC_VOLUME_KEY = "music_volume";
     public static final String EFFECTS_VOLUME_KEY = "effects_volume";
-    ApplicationSettings appSettings = new ApplicationSettings();
+
+    private boolean mShouldMusicStay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        mShouldMusicStay = true;
     }
 
     public static Intent getStartIntent(Context context) {
@@ -31,6 +33,9 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (!mShouldMusicStay) {
+            stopService(BackgroundMusicService.getIntent(getApplicationContext()));
+        }
     }
 
     @Override

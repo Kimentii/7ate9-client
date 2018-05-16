@@ -17,6 +17,9 @@ public class ApplicationSettings {
     private static final String BACKGROUND_PICTURE_WOOD_2 = "wood2";
     private static final String BACKGROUND_PICTURE_WOOD_3 = "wood3";
 
+    private ApplicationSettings() {
+    }
+
 
     public static boolean isMusicEnabled(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
