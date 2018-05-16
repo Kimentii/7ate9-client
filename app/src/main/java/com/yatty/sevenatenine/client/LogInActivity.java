@@ -89,8 +89,8 @@ public class LogInActivity extends AppCompatActivity {
                 view.setEnabled(false);
                 showSnackbar("Connecting...");
                 enterServer(
-                        mNameEditText.getText().toString(),
-                        AuthManager.getUniqueDeviceHash(getApplicationContext())
+                    mNameEditText.getText().toString(),
+                    AuthManager.getUniqueDeviceHash(getApplicationContext())
                 );
             } else {
                 showSnackbar("Enter nickname");
@@ -135,12 +135,12 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void enterServer(GoogleSignInAccount account) {
-        NetworkService.setHandler(mHandler);
         enterServer(account.getDisplayName(), "google acc: " + AuthManager.getSHAHash(account.getId()));
     }
 
     private void enterServer(String name, String passwordHash) {
         Log.d(TAG, "Connecting to server...");
+        NetworkService.setHandler(mHandler);
         mName = name;
         mPasswordHash = passwordHash;
         startService(NetworkService.getConnectionIntent(getApplicationContext()));

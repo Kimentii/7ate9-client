@@ -141,8 +141,8 @@ class NettyClient {
                     Log.d(TAG, "Failed to connect to server", future.cause());
                     mHandler.sendMessage(message);
                 }
-                mConnectedSemaphore.release();
             }).sync().channel();
+            mConnectedSemaphore.release();
             mChannel.closeFuture().addListener(new GenericFutureListener<Future<? super Void>>() {
                 @Override
                 public void operationComplete(Future<? super Void> e) throws Exception {
