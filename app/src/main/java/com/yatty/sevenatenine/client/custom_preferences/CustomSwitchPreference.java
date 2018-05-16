@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yatty.sevenatenine.client.R;
+
 public class CustomSwitchPreference extends SwitchPreference {
 
     public CustomSwitchPreference(Context context, AttributeSet attrs, int defStyle) {
@@ -28,6 +30,7 @@ public class CustomSwitchPreference extends SwitchPreference {
         TextView summaryTextView = view.findViewById(android.R.id.summary);
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/PermanentMarker.ttf");
         titleTextView.setTypeface(typeface);
+        titleTextView.setTextColor(getContext().getResources().getColor(R.color.black));
         summaryTextView.setTypeface(typeface);
     }
 }

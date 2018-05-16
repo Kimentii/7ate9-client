@@ -8,6 +8,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yatty.sevenatenine.client.R;
+
 public class CustomPreferenceCategory extends PreferenceCategory {
 
     public CustomPreferenceCategory(Context context, AttributeSet attrs, int defStyle) {
@@ -28,6 +30,7 @@ public class CustomPreferenceCategory extends PreferenceCategory {
         TextView titleTextView = (TextView) view.findViewById(android.R.id.title);
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/PermanentMarker.ttf");
         titleTextView.setTypeface(typeface);
+        titleTextView.setTextColor(getContext().getResources().getColor(R.color.black));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
     }
 }
