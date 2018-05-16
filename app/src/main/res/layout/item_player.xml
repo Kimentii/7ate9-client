@@ -8,28 +8,28 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/tv_lobby_name"
+        android:id="@+id/tv_player_name"
         style="@style/TextStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        tools:text="playerId"/>
+        tools:text="Kirill"/>
 
     <TextView
-        android:id="@+id/_title_players_in_lobby"
+        android:id="@+id/_title_rating"
         style="@style/TextStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_lobby_name"
-        android:text="@string/title_players_in_lobby"/>
+        android:layout_below="@+id/tv_player_name"
+        android:text="@string/title_rating"/>
 
     <TextView
         android:id="@+id/tv_player_rating"
         style="@style/TextStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_lobby_name"
+        android:layout_below="@id/tv_player_name"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/_title_players_in_lobby"
-        tools:text="1/3"/>
+        android:layout_toEndOf="@id/_title_rating"
+        tools:text="1600"/>
 </RelativeLayout>
