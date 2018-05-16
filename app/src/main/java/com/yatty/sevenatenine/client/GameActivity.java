@@ -529,7 +529,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        BackgroundMusicService.getInstance(this.getApplicationContext()).stop();
+        // TODO add music
+        //BackgroundMusicService.getInstance(this.getApplicationContext()).stop();
     }
 
     @Override

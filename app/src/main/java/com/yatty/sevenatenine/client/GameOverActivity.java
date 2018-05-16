@@ -114,7 +114,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-        BackgroundMusicService.getInstance(this.getApplicationContext()).pause();
+        stopService(BackgroundMusicService.getIntent(this));
     }
 
     @Override
@@ -122,6 +122,6 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         super.onResume();
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
-        BackgroundMusicService.getInstance(this.getApplicationContext()).start();
+        startService(BackgroundMusicService.getIntent(this));
     }
 }

@@ -103,7 +103,7 @@ public class LobbyListActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (!shouldMusicStay) {
-            BackgroundMusicService.getInstance(this.getApplicationContext()).pause();
+            stopService(BackgroundMusicService.getIntent(getApplicationContext()));
         }
     }
 
@@ -111,8 +111,10 @@ public class LobbyListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (ApplicationSettings.isMusicEnabled(this)) {
-            BackgroundMusicService.getInstance(this.getApplicationContext()).start();
+            startService(BackgroundMusicService.getIntent(getApplicationContext()));
         }
+        View rootView = findViewById(android.R.id.content);
+        rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
     }
 
     public static Intent getStartIntent(Context context) {

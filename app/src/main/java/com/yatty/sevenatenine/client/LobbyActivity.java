@@ -53,7 +53,7 @@ public class LobbyActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (!shouldMusicStay) {
-            BackgroundMusicService.getInstance(this.getApplicationContext()).pause();
+            startService(BackgroundMusicService.getIntent(this));
         }
     }
 
@@ -63,7 +63,7 @@ public class LobbyActivity extends AppCompatActivity {
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
         if (ApplicationSettings.isMusicEnabled(this)) {
-            BackgroundMusicService.getInstance(this.getApplicationContext()).start();
+            stopService(BackgroundMusicService.getIntent(this));
         }
     }
 

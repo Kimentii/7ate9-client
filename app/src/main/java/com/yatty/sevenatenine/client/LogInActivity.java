@@ -34,7 +34,7 @@ public class LogInActivity extends AppCompatActivity {
 
     private Button mConnectButton;
     private EditText mNameEditText;
-    private boolean shouldMusicStay;
+    private boolean mShouldMusicStay;
     private Handler mHandler;
 
 
@@ -51,8 +51,19 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (ApplicationSettings.isMusicEnabled(this)) {
+            startService(BackgroundMusicService.getIntent(getApplicationContext()));
+        }
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!mShouldMusicStay) {
+            stopService(BackgroundMusicService.getIntent(getApplicationContext()));
+        }
     }
 
     public void connectButtonClicked(View view) {
@@ -186,7 +197,7 @@ public class LogInActivity extends AppCompatActivity {
                 NetworkService.setHandler(null);
                 Intent nextActivity = LobbyListActivity.getStartIntent(context);
                 context.startActivity(nextActivity);
-                shouldMusicStay = true;
+                mShouldMusicStay = true;
                 appCompatActivity.finish();
             } else if (msg.obj instanceof ErrorResponse) {
                 ErrorResponse errorResponse = (ErrorResponse) msg.obj;

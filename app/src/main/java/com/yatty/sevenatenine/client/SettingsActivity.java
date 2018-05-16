@@ -31,7 +31,6 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        BackgroundMusicService.getInstance(this.getApplicationContext()).pause();
     }
 
     @Override
@@ -40,7 +39,7 @@ public class SettingsActivity extends PreferenceActivity {
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(getApplicationContext()));
         if (ApplicationSettings.isMusicEnabled(this)) {
-            BackgroundMusicService.getInstance(this.getApplicationContext()).start();
+            startService(BackgroundMusicService.getIntent(getApplicationContext()));
         }
     }
 

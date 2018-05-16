@@ -1,11 +1,54 @@
 package com.yatty.sevenatenine.client;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.IBinder;
+import android.util.Log;
 
-public class BackgroundMusicService {
+public class BackgroundMusicService extends Service {
     private static final String TAG = BackgroundMusicService.class.getSimpleName();
-    private static MediaPlayer sMediaPlayer;
+    MediaPlayer mMediaPlayer;
+
+    @Override
+    public IBinder onBind(Intent arg0) {
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, "onCreate");
+        mMediaPlayer = MediaPlayer.create(this, R.raw.music_background);
+        mMediaPlayer.setLooping(true);
+        mMediaPlayer.setVolume(100, 100);
+
+    }
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand");
+        if (!mMediaPlayer.isPlaying()) {
+            mMediaPlayer.start();
+        }
+        return START_REDELIVER_INTENT;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+        }
+        mMediaPlayer.release();
+    }
+
+    public static Intent getIntent(Context context) {
+        Intent intent = new Intent(context, BackgroundMusicService.class);
+        return intent;
+    }
+    /*private static MediaPlayer sMediaPlayer;
     private static BackgroundMusicService instance;
 
     private BackgroundMusicService(Context context) {
@@ -22,10 +65,6 @@ public class BackgroundMusicService {
         }
         return instance;
     }
-
-//    public static BackgroundMusicService getInstance() {
-//        return instance;
-//    }
 
     public void start() {
         if (!sMediaPlayer.isPlaying()) {
@@ -52,5 +91,5 @@ public class BackgroundMusicService {
             sMediaPlayer.stop();
         }
         sMediaPlayer.release();
-    }
+    }*/
 }

@@ -1,17 +1,13 @@
 package com.yatty.sevenatenine.client;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 public class PreferenceFragment extends android.preference.PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -49,10 +45,10 @@ public class PreferenceFragment extends android.preference.PreferenceFragment
         boolean musicEnabled = ApplicationSettings.isMusicEnabled(getActivity().getApplicationContext());
         if (musicEnabled) {
             Log.i(TAG, "Music enabled");
-            BackgroundMusicService.getInstance(getActivity().getApplicationContext()).start();
+            getActivity().startService(BackgroundMusicService.getIntent(getActivity().getApplicationContext()));
         } else {
             Log.i(TAG, "Music disabled");
-            BackgroundMusicService.getInstance(getActivity().getApplicationContext()).pause();
+            getActivity().stopService(BackgroundMusicService.getIntent(getActivity().getApplicationContext()));
         }
         Drawable background = ApplicationSettings.getBackgroundPicture(getActivity().getApplicationContext());
         View rootView = getActivity().findViewById(android.R.id.content);

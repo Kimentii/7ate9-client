@@ -10,6 +10,7 @@
         android:id="@+id/_tv_title_num_players_in_lobby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextStyleMedium"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/title_players_in_lobby"/>
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/_tv_title_num_players_in_lobby"
         android:layout_margin="3dp"
+        android:textAppearance="@style/TextStyleMedium"
         android:layout_toEndOf="@id/_tv_title_num_players_in_lobby"
         tools:text="4"
         />

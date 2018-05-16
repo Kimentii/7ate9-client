@@ -8,6 +8,8 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean mShouldMusicStay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         logInButton.setOnClickListener((view) -> {
             Intent logInIntent = LogInActivity.getStartIntent(this);
             startActivity(logInIntent);
+            mShouldMusicStay = true;
             finish();
         });
 
@@ -24,10 +27,12 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener((view) -> {
             Intent settingIntent = SettingsActivity.getStartIntent(this);
             startActivity(settingIntent);
+            mShouldMusicStay = true;
         });
 
         final Button exitButton = findViewById(R.id.button_exit);
         exitButton.setOnClickListener((view) -> {
+            mShouldMusicStay = false;
             finish();
         });
     }
@@ -35,7 +40,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (ApplicationSettings.isMusicEnabled(this)) {
+            startService(BackgroundMusicService.getIntent(getApplicationContext()));
+        }
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!mShouldMusicStay) {
+            stopService(BackgroundMusicService.getIntent(getApplicationContext()));
+        }
     }
 }

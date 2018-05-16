@@ -21,8 +21,7 @@
             android:layout_marginBottom="20dp"
             android:ems="7"
             android:hint="@string/hint_login_name"
-            android:inputType="textPersonName"
-            android:text="username"/>
+            android:inputType="textPersonName"/>
 
         <Button
             android:id="@+id/button_log_in"
