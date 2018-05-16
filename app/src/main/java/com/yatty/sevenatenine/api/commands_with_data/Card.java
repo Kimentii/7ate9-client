@@ -50,4 +50,9 @@ public class Card implements Parcelable, Serializable {
             return new Card[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return value + "±" + modifier;
+    }
 }

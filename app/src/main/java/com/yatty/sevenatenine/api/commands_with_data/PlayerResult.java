@@ -10,10 +10,12 @@ public class PlayerResult implements Parcelable, Serializable {
 
     private String playerId;
     private int cardsLeft;
+    private int newRating;
 
     protected PlayerResult(Parcel in) {
         playerId = in.readString();
         cardsLeft = in.readInt();
+        newRating = in.readInt();
     }
 
     public static final Creator<PlayerResult> CREATOR = new Creator<PlayerResult>() {
@@ -37,6 +39,7 @@ public class PlayerResult implements Parcelable, Serializable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(playerId);
         dest.writeInt(cardsLeft);
+        dest.writeInt(newRating);
     }
 
     public String getPlayerId() {
@@ -51,4 +54,11 @@ public class PlayerResult implements Parcelable, Serializable {
         return cardsLeft;
     }
 
+    public int getNewRating() {
+        return newRating;
+    }
+
+    public void setNewRating(int newRating) {
+        this.newRating = newRating;
+    }
 }

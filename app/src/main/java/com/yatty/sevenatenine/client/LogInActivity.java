@@ -26,7 +26,6 @@ import com.yatty.sevenatenine.api.in_commands.LogInResponse;
 import com.yatty.sevenatenine.api.out_commands.LogInRequest;
 import com.yatty.sevenatenine.client.auth.AuthManager;
 import com.yatty.sevenatenine.client.auth.SessionInfo;
-import com.yatty.sevenatenine.client.errors.network.ConnectionRefusedException;
 import com.yatty.sevenatenine.client.messages.network.ConnectionRefusedMessage;
 import com.yatty.sevenatenine.client.messages.network.ServerConnectedMessage;
 import com.yatty.sevenatenine.client.network.NetworkService;
@@ -70,6 +69,14 @@ public class LogInActivity extends AppCompatActivity {
         if (!mShouldMusicStay) {
             stopService(BackgroundMusicService.getIntent(getApplicationContext()));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent nextActivity = MainActivity.getStartIntent(this);
+        startActivity(nextActivity);
+        mShouldMusicStay = true;
+        finish();
     }
 
     public void connectButtonClicked(View view) {

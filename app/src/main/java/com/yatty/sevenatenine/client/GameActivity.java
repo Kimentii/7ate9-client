@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.yatty.sevenatenine.api.commands_with_data.Card;
 import com.yatty.sevenatenine.api.commands_with_data.PlayerInfo;
+import com.yatty.sevenatenine.api.commands_with_data.PlayerResult;
 import com.yatty.sevenatenine.api.in_commands.GameStartedNotification;
 import com.yatty.sevenatenine.api.in_commands.MoveRejectedResponse;
 import com.yatty.sevenatenine.api.in_commands.NewStateNotification;
@@ -109,15 +110,15 @@ public class GameActivity extends AppCompatActivity {
         switch (otherPlayersInfo.length) {
             case 3:
                 mThirdPlayerDeck.setVisibility(View.VISIBLE);
-                mThirdPlayerNameTextView.setText(otherPlayersInfo[2].getPlayerId());
+                mThirdPlayerNameTextView.setText(otherPlayersInfo[2].getPlayerName());
                 mThirdPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
             case 2:
                 mSecondPlayerDeck.setVisibility(View.VISIBLE);
-                mSecondPlayerNameTextView.setText(otherPlayersInfo[1].getPlayerId());
+                mSecondPlayerNameTextView.setText(otherPlayersInfo[1].getPlayerName());
                 mSecondPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
             case 1:
                 mFirstPlayerDeck.setVisibility(View.VISIBLE);
-                mFirstPlayerNameTextView.setText(otherPlayersInfo[0].getPlayerId());
+                mFirstPlayerNameTextView.setText(otherPlayersInfo[0].getPlayerName());
                 mFirstPlayerCardsNumTextView.setText(String.valueOf(cardsNum));
         }
         mUserCardsNumTextView.setText(String.valueOf(cardsNum));
@@ -220,7 +221,6 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        hideStatusBar();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         prepareSoundPool();
@@ -320,11 +320,6 @@ public class GameActivity extends AppCompatActivity {
         return null;
     }
 
-    private void hideStatusBar() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
-
     class CardButtonOnClickListener implements View.OnClickListener {
         private Card card;
 
@@ -353,6 +348,7 @@ public class GameActivity extends AppCompatActivity {
                 notifyMistake = false;
                 return;
             }
+            Log.d(TAG, "Card " + card + " clicked, top card: " + mTopCard);
             int rightValue1 = mTopCard.getValue() + mTopCard.getModifier();
             if (rightValue1 > MAX_CARD) {
                 rightValue1 -= MAX_CARD;
@@ -421,6 +417,12 @@ public class GameActivity extends AppCompatActivity {
                 NewStateNotification newStateNotification = (NewStateNotification) msg.obj;
                 if (newStateNotification.isLastMove()) {
                     NetworkService.setHandler(null);
+                    // updating user's rating
+                    for (PlayerResult result : newStateNotification.getGameResult().getScores()) {
+                        if (SessionInfo.getUserId().equals(result.getPlayerId())) {
+                            SessionInfo.setUserRating(result.getNewRating());
+                        }
+                    }
                     Intent nextActivity = GameOverActivity.newIntent(getApplicationContext(), SessionInfo.getUserName(),
                             newStateNotification.getGameResult().getWinner(), newStateNotification.getGameResult().getScores());
                     startActivity(nextActivity);
@@ -496,6 +498,7 @@ public class GameActivity extends AppCompatActivity {
                         mTopCardImageButton.bringToFront();
                     }
                     mTopCard = newStateNotification.getNextCard();
+                    Log.d(TAG, "Got new top card: " + mTopCard);
                     mMoveNumber = newStateNotification.getMoveNumber();
                     mTopCardImageButton.setImageDrawable(getDrawableCard(mTopCard));
                 }
@@ -529,8 +532,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // TODO add music
-        //BackgroundMusicService.getInstance(this.getApplicationContext()).stop();
     }
 
     @Override

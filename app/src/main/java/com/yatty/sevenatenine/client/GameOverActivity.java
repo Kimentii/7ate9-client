@@ -29,6 +29,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     private String mPlayerName;
     private String mWinnerName;
     private ListView mScoreBoard;
+    private boolean mShouldMusicStay;
     PlayerResult[] mScores;
 
 
@@ -44,6 +45,7 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         Intent intent = LobbyListActivity.getStartIntent(getApplicationContext());
         startActivity(intent);
+        mShouldMusicStay = true;
         finish();
     }
 
@@ -114,7 +116,9 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-        stopService(BackgroundMusicService.getIntent(this));
+        if (!mShouldMusicStay) {
+            stopService(BackgroundMusicService.getIntent(this));
+        }
     }
 
     @Override
@@ -122,6 +126,8 @@ public class GameOverActivity extends AppCompatActivity implements View.OnClickL
         super.onResume();
         View rootView = findViewById(android.R.id.content);
         rootView.setBackground(ApplicationSettings.getBackgroundPicture(this));
-        startService(BackgroundMusicService.getIntent(this));
+        if (ApplicationSettings.isMusicEnabled(this)) {
+            startService(BackgroundMusicService.getIntent(this));
+        }
     }
 }
