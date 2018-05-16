@@ -11,15 +11,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -497,6 +500,9 @@ public class GameActivity extends AppCompatActivity {
                         mCardUnderTopCardImageButton.setImageDrawable(mTopCardImageButton.getDrawable());
                         mTopCardImageButton.bringToFront();
                     }
+                    if (newStateNotification.isStalemate()) {
+                        showToast("Stalemate, random card will be set!");
+                    }
                     mTopCard = newStateNotification.getNextCard();
                     Log.d(TAG, "Got new top card: " + mTopCard);
                     mMoveNumber = newStateNotification.getMoveNumber();
@@ -504,6 +510,10 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
     }
 
     @Override
