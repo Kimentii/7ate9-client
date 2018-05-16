@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +20,12 @@ import android.widget.TextView;
 import com.yatty.sevenatenine.api.commands_with_data.PlayerInfo;
 import com.yatty.sevenatenine.api.in_commands.GameStartedNotification;
 import com.yatty.sevenatenine.api.in_commands.LobbyStateChangedNotification;
-import com.yatty.sevenatenine.api.out_commands.LeaveGameRequest;
 import com.yatty.sevenatenine.api.out_commands.LeaveLobbyRequest;
 import com.yatty.sevenatenine.client.auth.SessionInfo;
 import com.yatty.sevenatenine.client.network.NetworkService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LobbyActivity extends AppCompatActivity {
     private static final String TAG = LobbyActivity.class.getSimpleName();
@@ -99,6 +102,10 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void updatePlayersListUi(PlayerInfo[] playerList) {
+        Log.d(TAG, "updatePlayersListUi");
+        for (PlayerInfo pi : playerList) {
+            Log.d(TAG, pi.getPlayerId());
+        }
         mPlayersNumberTextView.setText(String.valueOf(playerList.length)
                 + "/" + String.valueOf(SessionInfo.getPublicLobbyInfo().getMaxPlayersNumber()));
         if (mLobbyPlayersListView.getAdapter() == null) {
@@ -106,24 +113,22 @@ public class LobbyActivity extends AppCompatActivity {
         } else {
             LobbyPlayersListAdapter lobbyPlayersListAdapter = (LobbyPlayersListAdapter) mLobbyPlayersListView.getAdapter();
             lobbyPlayersListAdapter.clear();
-            for (PlayerInfo playerInfo : playerList) {
-                lobbyPlayersListAdapter.add(playerInfo);
-            }
+            lobbyPlayersListAdapter.addAll(playerList);
             lobbyPlayersListAdapter.notifyDataSetChanged();
         }
     }
 
     private class LobbyPlayersListAdapter extends ArrayAdapter<PlayerInfo> {
-        private PlayerInfo[] mPlayerList;
+        private ArrayList<PlayerInfo> mPlayerList;
 
         public LobbyPlayersListAdapter(Context context, PlayerInfo[] playerList) {
             super(context, R.layout.item_player);
-            this.mPlayerList = playerList;
+            this.mPlayerList = new ArrayList<>(Arrays.asList(playerList));
         }
 
         @Override
         public View getView(int position, View listView, ViewGroup parent) {
-            PlayerInfo playerInfo = mPlayerList[position];
+            PlayerInfo playerInfo = mPlayerList.get(position);
 
             if (listView == null) {
                 listView = LayoutInflater.from(getContext())
@@ -138,7 +143,25 @@ public class LobbyActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mPlayerList.length;
+            return mPlayerList.size();
+        }
+
+        @Override
+        public void addAll(PlayerInfo... items) {
+            super.addAll(items);
+            mPlayerList = new ArrayList<>(Arrays.asList(items));
+        }
+
+        @Override
+        public void add(@Nullable PlayerInfo playerInfo) {
+            super.add(playerInfo);
+            mPlayerList.add(playerInfo);
+        }
+
+        @Override
+        public void clear() {
+            super.clear();
+            mPlayerList = new ArrayList<>();
         }
     }
 
@@ -159,8 +182,6 @@ public class LobbyActivity extends AppCompatActivity {
                 }
                 SessionInfo.setPrivateLobbyInfo(lobbyStateChangedNotification.getPrivateLobbyInfo());
                 updatePlayersListUi(SessionInfo.getPrivateLobbyInfo().getPlayers());
-                mPlayersNumberTextView.setText(String.valueOf(lobbyStateChangedNotification
-                        .getPrivateLobbyInfo().getPlayers().length));
             }
         }
     }

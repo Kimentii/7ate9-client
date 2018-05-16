@@ -1,7 +1,6 @@
 package com.yatty.sevenatenine.client.custom_preferences;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.preference.EditTextPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -27,10 +26,8 @@ public class CustomEditTextPreference extends EditTextPreference {
     protected void onBindView(View view) {
         super.onBindView(view);
         TextView titleTextView = (TextView) view.findViewById(android.R.id.title);
-        TextView summaryTextView = view.findViewById(android.R.id.summary);
-        Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/PermanentMarker.ttf");
-        titleTextView.setTypeface(typeface);
+        //Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/PermanentMarker.ttf");
+        //titleTextView.setTypeface(typeface);
         titleTextView.setTextColor(getContext().getResources().getColor(R.color.black));
-        summaryTextView.setTypeface(typeface);
     }
 }
